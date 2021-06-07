@@ -34,9 +34,9 @@ class Grid():
         return self.__grid
 
     def generateGrid(self):
-        for i in range (self.__NbColone):
+        for i in range (self.__NbLigne):
             self.__grid.append([])
-            for j in range (self.__NbLigne):
+            for j in range (self.__NbColone):
                 self.__grid[i].append(0)
 
     def getTaille(self):
@@ -47,19 +47,42 @@ class Grid():
 
 
     def deplacerJo(self,x,y):
-        if not (0<=self.positionJ[0]+x<self.__NbColone):
+        if ((self.positionC[0]==0) and ((self.positionC[0]==self.positionJ[0]+x)and(self.positionC[1]==self.positionJ[1]))):
+            print("bloqué 1.3")
+            self.positionJ[0] = 1
+            return 
+        elif ((self.positionC[0]==self.__NbLigne-1) and ((self.positionC[0]==self.positionJ[0]+x)and(self.positionC[1]==self.positionJ[1]))):
+            print("bloqué 1.4")
+            self.positionJ[0]=self.__NbLigne-2
             return
-        elif not (0<=self.positionJ[1]+y<self.__NbLigne):
+        elif ((self.positionC[1]==0) and ((self.positionC[1]==self.positionJ[1]+y)and(self.positionC[0]==self.positionJ[0]))):
+            print("bloqué 1.3")
+            self.positionJ[1] = 1
+            return 
+        elif ((self.positionC[1]==self.__NbColone-1) and ((self.positionC[1]==self.positionJ[1]+y)and(self.positionC[0]==self.positionJ[0]))):
+            print("bloqué 1.4")
+            self.positionJ[1]=self.__NbColone-2
             return
+        elif not (0<=self.positionJ[0]+x<self.__NbLigne):
+            print("bloqué 1.1")
+            return
+        elif not (0<=self.positionJ[1]+y<self.__NbColone):
+            print("bloqué 1.2")
+            return
+        
         else:
             lgnavt=self.positionJ[0]
             colavt = self.positionJ[1]
             self.positionJ[0] = self.positionJ[0] + x
             self.positionJ[1] = self.positionJ[1] + y
-            print(self.positionJ[1])
 
-
-        if (self.positionJ[0]==self.positionC[0] and self.positionJ[1]==self.positionC[1] ):
+        if not (0<=self.positionC[0]+x<self.__NbLigne) and ((self.positionC[0]==self.positionJ[0])and (self.positionC[1]==self.positionJ[1])):
+            print("bloqué 1")
+            return
+        elif not (0<=self.positionC[1]+y<self.__NbColone)and ((self.positionC[1]==self.positionJ[1])and (self.positionC[0]==self.positionJ[0])):
+            print("bloqué 2")
+            return 
+        elif ((self.positionJ[0]==self.positionC[0] and self.positionJ[1]==self.positionC[1])or(self.positionJ[1]==self.positionC[1] and self.positionJ[0]==self.positionC[0])):
             self.positionC[0]=self.positionC[0]+x
             self.positionC[1] = self.positionC[1]+y
 
@@ -69,11 +92,10 @@ class Grid():
         colJ = self.positionJ[1] # colonne joueur
 
         print(lgnJ,colJ)
+        print(lgnC,colC)
         self.__grid[lgnJ][colJ]=1
         self.__grid[lgnavt][colavt]=0
         self.__grid[lgnC][colC]=2
         self.__view.UpdateView()
-
-
 
 
