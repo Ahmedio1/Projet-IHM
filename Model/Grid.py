@@ -14,8 +14,8 @@ class Grid():
         self.generateGrid()
         self.__view=None
         self.__controle=None
-        self.__xJ=5
-        self.__yJ=5
+        self.__xJ=3
+        self.__yJ=6
         self.__xC=2
         self.__yC=2
         self.__xM=4
@@ -48,13 +48,36 @@ class Grid():
     def setControle(self,controle):
         self.__controle=controle
 
+    def deplacerCai(self,x,y):
+
+        if (self.__grid[self.positionC[0]+x][self.positionC[1]] in [ 1 , 3 ]) or (self.__grid[self.positionC[0]][self.positionC[1]+y] in [ 1 , 3 ]):
+            return False
+        #Caisse
+        if not (0<=self.positionC[0]+x<self.__NbLigne) and ((self.positionC[0]==self.positionJ[0])and (self.positionC[1]==self.positionJ[1])):
+            print("bloqué 1")
+            return
+        elif not (0<=self.positionC[1]+y<self.__NbColone)and ((self.positionC[1]==self.positionJ[1])and (self.positionC[0]==self.positionJ[0])):
+            print("bloqué 2")
+            return 
+        elif ((self.positionJ[0]==self.positionC[0] and self.positionJ[1]==self.positionC[1])or(self.positionJ[1]==self.positionC[1] and self.positionJ[0]==self.positionC[0])):
+            self.positionC[0]=self.positionC[0]+x
+            self.positionC[1] = self.positionC[1]+y
+        
+        lgnC =self.positionC[0] # ligne case
+        colC =self.positionC[1] # colonne case
+        self.__grid[lgnC][colC]=2
+        
+
+
 
     def deplacerJo(self,x,y):
+        
         # Mur
-        if ((self.positionJ[0]==self.positionM1[0])and(self.positionJ[1]==self.positionM1[1])):
-            self.positionJ[0]=self.positionJ[0]
-            self.positionJ[1]=self.positionJ[1]
-
+        if (self.positionJ[0]+x == self.positionM1[0]) and (self.positionJ[1]==self.positionM1[1]):
+            return
+        if (self.positionJ[0] == self.positionM1[0]) and (self.positionJ[1]+y ==self.positionM1[1]):
+            return
+        
         #Joueur
         if ((self.positionC[0]==0) and ((self.positionC[0]==self.positionJ[0]+x)and(self.positionC[1]==self.positionJ[1]))):
             print("bloqué 1.3")
@@ -85,31 +108,13 @@ class Grid():
             self.positionJ[0] = self.positionJ[0] + x
             self.positionJ[1] = self.positionJ[1] + y
 
-        #Caisse
-        if not (0<=self.positionC[0]+x<self.__NbLigne) and ((self.positionC[0]==self.positionJ[0])and (self.positionC[1]==self.positionJ[1])):
-            print("bloqué 1")
-            return
-        elif not (0<=self.positionC[1]+y<self.__NbColone)and ((self.positionC[1]==self.positionJ[1])and (self.positionC[0]==self.positionJ[0])):
-            print("bloqué 2")
-            return 
-        elif ((self.positionJ[0]==self.positionC[0] and self.positionJ[1]==self.positionC[1])or(self.positionJ[1]==self.positionC[1] and self.positionJ[0]==self.positionC[0])):
-            self.positionC[0]=self.positionC[0]+x
-            self.positionC[1] = self.positionC[1]+y
-
-
-
-        lgnC =self.positionC[0] # ligne case
-        colC =self.positionC[1] # colonne case
+        self.deplacerCai(x,y)
         lgnJ = self.positionJ[0] # ligne joueur
         colJ = self.positionJ[1] # colonne joueur
         lgnM = self.positionM1[0] # ligne mur
         colM = self.positionM1[1] # colonne mur
-
-        print(lgnJ,colJ)
-        print(lgnC,colC)
         self.__grid[lgnJ][colJ]=1
         self.__grid[lgnavt][colavt]=0
-        self.__grid[lgnC][colC]=2
         self.__grid[lgnM][colM]=3
         self.__view.UpdateView()
 
