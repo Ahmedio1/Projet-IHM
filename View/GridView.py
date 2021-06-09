@@ -35,6 +35,8 @@ class GridView(QMainWindow):
                     carre.setStyleSheet("background-color: black; border:1px solid black")
                 if grid[i][j]==2:
                     carre.setStyleSheet("background-color: yellow; border:1px solid black")
+                if grid[i][j]==3:
+                    carre.setStyleSheet("background-color : red; border:1px solid black")
                 self.__GridLayout.addWidget(carre,i,j)
 
 
