@@ -8,8 +8,8 @@ class Grid():
 
     def __init__(self):
         self.__Taille=64
-        self.__NbLigne=9
-        self.__NbColone=8
+        self.__NbLigne=10
+        self.__NbColone=10
         self.__grid=[]
         self.generateGrid()
         self.__view=None
@@ -50,8 +50,9 @@ class Grid():
 
     def deplacerCai(self,x,y):
 
-        if (self.__grid[self.positionC[0]+x][self.positionC[1]] in [ 1 , 3 ]) or (self.__grid[self.positionC[0]][self.positionC[1]+y] in [ 1 , 3 ]):
-            return False
+        if (self.__grid[self.positionC[0]+x][self.positionC[1]+y]==3):
+            return
+
         #Caisse
         if not (0<=self.positionC[0]+x<self.__NbLigne) and ((self.positionC[0]==self.positionJ[0])and (self.positionC[1]==self.positionJ[1])):
             print("bloqué 1")
