@@ -14,24 +14,10 @@ class Grid():
         self.generateGrid()
         self.__view=None
         self.__controle=None
-        #coordoonne initiale:
         #du joueur
         self.__xJ=3
         self.__yJ=6
-        #d'une caisse
-        self.__xC=2
-        self.__yC=2
-        #d'un mur
-        self.__xM=6
-        self.__yM=6
-        #d'un trou
-        self.__xT=7
-        self.__yT=7
         self.positionJ=[self.__xJ,self.__yJ]
-        self.positionC=[self.__xC,self.__yC]
-        self.positionM1=[self.__xM,self.__yM]
-        self.positionT=[self.__xT,self.__yT]
-        self.__grid[self.positionT[0]][self.positionT[1]]=4#assignation du trou (elle est faite ici car le trou ne change jamais de position)
         self.generateMap1()
 
 
@@ -60,41 +46,44 @@ class Grid():
         self.__controle=controle
 
     def generateMap1(self):
-        for i in range (len(self.__grid)):
+        for i in range (len(self.__grid)): #entourage de la map avec des murs
             self.__grid[i][0]=3
             self.__grid[0][i]=3
             self.__grid[i][9]=3
             self.__grid[9][i]=3
+        self.__grid[7][7]=4 #placement d'un trou
+        self.__grid[5][4]=3
+        self.__grid[2][2]=2 #placement d'une caisse
+        self.__grid[7][2]=2
 
 
 
     def deplacerCai(self,x,y):
-        #test que la caisse n'est pas dans le trou
-        if (self.__grid[self.positionC[0]][self.positionC[1]]==5):
-            return
-
-        if (self.__grid[self.positionC[0]+x][self.positionC[1]+y]==3):
-            return
+        #test que la caisse ne vas pas dans un mur
+        for i in range (len(self.__grid)):
+            for j in range (len(self.__grid[i])): #parcours chaque case
+                if (self.__grid[i][j]==2): #si c'est une caisse
+                    if (self.__grid[i+x][j+y]==2 or self.__grid[i+x][j+y]==3 or self.__grid[i+x][j+y]==5): #test la case vers laquelle on veut aller est un mur/autre caisse/trou rempli
+                        return #ne se deplace pas
 
         #Caisse
-        if not (0<=self.positionC[0]+x<self.__NbLigne) and ((self.positionC[0]==self.positionJ[0])and (self.positionC[1]==self.positionJ[1])):
-            print("bloqué 1")
-            return
-        elif not (0<=self.positionC[1]+y<self.__NbColone)and ((self.positionC[1]==self.positionJ[1])and (self.positionC[0]==self.positionJ[0])):
-            print("bloqué 2")
-            return 
-        elif ((self.positionJ[0]==self.positionC[0] and self.positionJ[1]==self.positionC[1])or(self.positionJ[1]==self.positionC[1] and self.positionJ[0]==self.positionC[0])):
-            self.positionC[0]=self.positionC[0]+x
-            self.positionC[1] = self.positionC[1]+y
+        #test que la caisse ne sorte pas de la map
+        for i in range (len(self.__grid)):
+            for j in range (len(self.__grid[i])): #parcours chaque case
+                if (self.__grid[i][j]==2): #si c'est une caisse
+                    if not (0<=i+x<self.__NbLigne) and ((i==self.positionJ[0])and (j==self.positionJ[1])):
+                        print("bloqué 1")
+                        return
+                    elif not (0<=j+y<self.__NbColone)and ((j==self.positionJ[1])and (i==self.positionJ[0])):
+                        print("bloqué 2")
+                        return
+                    elif (self.positionJ[0]==i and self.positionJ[1]==j): #test que la caisse a le droit de se déplacer
+                        if (self.__grid[i+x][j+y]==4): #test de deplacement dans le trou
+                            self.__grid[i+x][j+y]=5  #la case prend l'etat 5 correspondant a une caisse dans un trou
+                        else:
+                            self.__grid[i+x][j+y]=2 #la nouvelle case devient une caisse
 
-            
-        
-        lgnC =self.positionC[0] # ligne case
-        colC =self.positionC[1] # colonne case
-        self.__grid[lgnC][colC]=2
 
-        if (self.positionC[0]==self.positionT[0] and self.positionC[1]==self.positionT[1]):#verifie que la caisse est dans le trou
-                self.__grid[self.positionT[0]][self.positionT[1]]=5 #met la case a un etat signifiant qu'il y a une caisse dans un trou
 
         
         
@@ -105,31 +94,39 @@ class Grid():
         
         # Mur
         for i in range (len(self.__grid)):
-            for j in range (len(self.__grid[i])):
-                if (self.__grid[i][j]==3):
+            for j in range (len(self.__grid[i])): 
+                if (self.__grid[i][j]==3 or self.__grid[i][j]==4 or self.__grid[i][j]==5): #pour chaque case check si il s'agit d'un mur ou d'un trou (vide ou pas)
                     if (self.positionJ[0]+x == i) and (self.positionJ[1]==j):
                         return
                     if (self.positionJ[0] == i) and (self.positionJ[1]+y ==j):
                         return
         
         #Joueur
-        if ((self.positionC[0]==0) and ((self.positionC[0]==self.positionJ[0]+x)and(self.positionC[1]==self.positionJ[1]))):
-            print("bloqué 1.5")
-            self.positionJ[0] = 1
-            return 
-        elif ((self.positionC[0]==self.__NbLigne-1) and ((self.positionC[0]==self.positionJ[0]+x)and(self.positionC[1]==self.positionJ[1]))):
-            print("bloqué 1.6")
-            self.positionJ[0]=self.__NbLigne-2
-            return
-        elif ((self.positionC[1]==0) and ((self.positionC[1]==self.positionJ[1]+y)and(self.positionC[0]==self.positionJ[0]))):
-            print("bloqué 1.3")
-            self.positionJ[1] = 1
-            return 
-        elif ((self.positionC[1]==self.__NbColone-1) and ((self.positionC[1]==self.positionJ[1]+y)and(self.positionC[0]==self.positionJ[0]))):
-            print("bloqué 1.4")
-            self.positionJ[1]=self.__NbColone-2
-            return
-        elif not (0<=self.positionJ[0]+x<self.__NbLigne):
+        for i in range (len(self.__grid)):
+            for j in range (len(self.__grid[i])): #parcours chaque case
+                if (self.__grid[i][j]==2): #si c'est une caisse
+                    #test que qu'on n'essaye pas de faire sortir une caisse de la map
+                    if ((i==0) and ((i==self.positionJ[0]+x)and(j==self.positionJ[1]))):
+                        print("bloqué 1.5")
+                        self.positionJ[0] = 1
+                        return 
+                    elif ((i==self.__NbLigne-1) and ((i==self.positionJ[0]+x)and(j==self.positionJ[1]))):
+                        print("bloqué 1.6")
+                        self.positionJ[0]=self.__NbLigne-2
+                        return
+                    elif ((j==0) and ((j==self.positionJ[1]+y)and(i==self.positionJ[0]))):
+                        print("bloqué 1.3")
+                        self.positionJ[1] = 1
+                        return 
+                    elif ((j==self.__NbColone-1) and ((j==self.positionJ[1]+y)and(i==self.positionJ[0]))):
+                        print("bloqué 1.4")
+                        self.positionJ[1]=self.__NbColone-2
+                        return
+                    elif (((i==self.positionJ[0]+x)and(j==self.positionJ[1]+y)) and (self.__grid[self.positionJ[0]+2*x][self.positionJ[1]+2*y]==3 or self.__grid[self.positionJ[0]+2*x][self.positionJ[1]+2*y]==5)):
+                        print(self.positionJ[0]+2*x,self.positionJ[1]+2*y)
+                        return
+
+        if not (0<=self.positionJ[0]+x<self.__NbLigne):
             print("bloqué 1.1")
             return
         elif not (0<=self.positionJ[1]+y<self.__NbColone):
@@ -145,13 +142,7 @@ class Grid():
         self.deplacerCai(x,y)
         lgnJ = self.positionJ[0] # ligne joueur
         colJ = self.positionJ[1] # colonne joueur
-        lgnM = self.positionM1[0] # ligne mur
-        colM = self.positionM1[1] # colonne mur
-        lgnT=self.positionT[0]
-        colT=self.positionT[1]
         self.__grid[lgnJ][colJ]=1
         self.__grid[lgnavt][colavt]=0
-        self.__grid[lgnM][colM]=3
-        
         self.__view.UpdateView()
 

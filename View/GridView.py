@@ -37,17 +37,17 @@ class GridView(QMainWindow):
                 carre=QWidget()
                 carre.setFixedSize(self.__Grid.getTaille(),self.__Grid.getTaille())
                 if grid[i][j]==0:
-                    carre.setStyleSheet("background-image: url(block/dirt.png)")
+                    carre.setStyleSheet("background-image: url(block/dirt.png)")#mettre le sol derrière!
                 if grid[i][j]==1:
-                    carre.setStyleSheet("background-image: url(block/oxeye_daisy.png)")#mettre le sol derrière!
+                    carre.setStyleSheet("background-image: url(block/oxeye_daisy.png)")#joueur
                 if grid[i][j]==2:
-                    carre.setStyleSheet("background-image: url(block/lime_wool.png)")
+                    carre.setStyleSheet("background-image: url(block/lime_wool.png)")#caisse
                 if grid[i][j]==3:
-                    carre.setStyleSheet("background-image: url(block/cobblestone.png) ")
+                    carre.setStyleSheet("background-image: url(block/cobblestone.png) ")#mur
                 if grid[i][j]==4:
-                    carre.setStyleSheet("background-image: url(block/black_stained_glass.png) ")
+                    carre.setStyleSheet("background-image: url(block/black_stained_glass.png) ")#trou
                 if grid[i][j]==5:
-                    carre.setStyleSheet("background-image: url(block/item_frame.png) ")
+                    carre.setStyleSheet("background-image: url(block/item_frame.png) ") #trou + caisse
                 self.__GridLayout.addWidget(carre,i,j)
 
 
