@@ -14,19 +14,26 @@ class Grid():
         self.generateGrid()
         self.__view=None
         self.__controle=None
+        #coordoonne initiale:
+        #du joueur
         self.__xJ=3
         self.__yJ=6
+        #d'une caisse
         self.__xC=2
         self.__yC=2
+        #d'un mur
         self.__xM=6
         self.__yM=6
+        #d'un trou
         self.__xT=7
         self.__yT=7
         self.positionJ=[self.__xJ,self.__yJ]
         self.positionC=[self.__xC,self.__yC]
         self.positionM1=[self.__xM,self.__yM]
         self.positionT=[self.__xT,self.__yT]
-        self.__grid[self.positionT[0]][self.positionT[1]]=4#assignation du trou (ele est faite ici car le trou ne change jamais de position)
+        self.__grid[self.positionT[0]][self.positionT[1]]=4#assignation du trou (elle est faite ici car le trou ne change jamais de position)
+        self.generateMap1()
+
 
     def getNbLigne(self):
         return self.__NbLigne
@@ -52,10 +59,18 @@ class Grid():
     def setControle(self,controle):
         self.__controle=controle
 
+    def generateMap1(self):
+        for i in range (len(self.__grid)):
+            self.__grid[i][0]=3
+            self.__grid[0][i]=3
+            self.__grid[i][9]=3
+            self.__grid[9][i]=3
+
+
+
     def deplacerCai(self,x,y):
         #test que la caisse n'est pas dans le trou
         if (self.__grid[self.positionC[0]][self.positionC[1]]==5):
-            print("caisse dans trou")
             return
 
         if (self.__grid[self.positionC[0]+x][self.positionC[1]+y]==3):
@@ -89,10 +104,13 @@ class Grid():
     def deplacerJo(self,x,y):
         
         # Mur
-        if (self.positionJ[0]+x == self.positionM1[0]) and (self.positionJ[1]==self.positionM1[1]):
-            return
-        if (self.positionJ[0] == self.positionM1[0]) and (self.positionJ[1]+y ==self.positionM1[1]):
-            return
+        for i in range (len(self.__grid)):
+            for j in range (len(self.__grid[i])):
+                if (self.__grid[i][j]==3):
+                    if (self.positionJ[0]+x == i) and (self.positionJ[1]==j):
+                        return
+                    if (self.positionJ[0] == i) and (self.positionJ[1]+y ==j):
+                        return
         
         #Joueur
         if ((self.positionC[0]==0) and ((self.positionC[0]==self.positionJ[0]+x)and(self.positionC[1]==self.positionJ[1]))):
@@ -136,5 +154,4 @@ class Grid():
         self.__grid[lgnM][colM]=3
         
         self.__view.UpdateView()
-        print(self.__grid[7][7])
 
