@@ -18,11 +18,15 @@ class Grid():
         self.__yJ=6
         self.__xC=2
         self.__yC=2
-        self.__xM=4
+        self.__xM=6
         self.__yM=6
+        self.__xT=7
+        self.__yT=7
         self.positionJ=[self.__xJ,self.__yJ]
         self.positionC=[self.__xC,self.__yC]
         self.positionM1=[self.__xM,self.__yM]
+        self.positionT=[self.__xT,self.__yT]
+        self.__grid[self.positionT[0]][self.positionT[1]]=4#assignation du trou (ele est faite ici car le trou ne change jamais de position)
 
     def getNbLigne(self):
         return self.__NbLigne
@@ -49,6 +53,10 @@ class Grid():
         self.__controle=controle
 
     def deplacerCai(self,x,y):
+        #test que la caisse n'est pas dans le trou
+        if (self.__grid[self.positionC[0]][self.positionC[1]]==5):
+            print("caisse dans trou")
+            return
 
         if (self.__grid[self.positionC[0]+x][self.positionC[1]+y]==3):
             return
@@ -63,10 +71,17 @@ class Grid():
         elif ((self.positionJ[0]==self.positionC[0] and self.positionJ[1]==self.positionC[1])or(self.positionJ[1]==self.positionC[1] and self.positionJ[0]==self.positionC[0])):
             self.positionC[0]=self.positionC[0]+x
             self.positionC[1] = self.positionC[1]+y
+
+            
         
         lgnC =self.positionC[0] # ligne case
         colC =self.positionC[1] # colonne case
         self.__grid[lgnC][colC]=2
+
+        if (self.positionC[0]==self.positionT[0] and self.positionC[1]==self.positionT[1]):#verifie que la caisse est dans le trou
+                self.__grid[self.positionT[0]][self.positionT[1]]=5 #met la case a un etat signifiant qu'il y a une caisse dans un trou
+
+        
         
 
 
@@ -81,11 +96,11 @@ class Grid():
         
         #Joueur
         if ((self.positionC[0]==0) and ((self.positionC[0]==self.positionJ[0]+x)and(self.positionC[1]==self.positionJ[1]))):
-            print("bloqué 1.3")
+            print("bloqué 1.5")
             self.positionJ[0] = 1
             return 
         elif ((self.positionC[0]==self.__NbLigne-1) and ((self.positionC[0]==self.positionJ[0]+x)and(self.positionC[1]==self.positionJ[1]))):
-            print("bloqué 1.4")
+            print("bloqué 1.6")
             self.positionJ[0]=self.__NbLigne-2
             return
         elif ((self.positionC[1]==0) and ((self.positionC[1]==self.positionJ[1]+y)and(self.positionC[0]==self.positionJ[0]))):
@@ -114,9 +129,12 @@ class Grid():
         colJ = self.positionJ[1] # colonne joueur
         lgnM = self.positionM1[0] # ligne mur
         colM = self.positionM1[1] # colonne mur
+        lgnT=self.positionT[0]
+        colT=self.positionT[1]
         self.__grid[lgnJ][colJ]=1
         self.__grid[lgnavt][colavt]=0
         self.__grid[lgnM][colM]=3
+        
         self.__view.UpdateView()
-
+        print(self.__grid[7][7])
 

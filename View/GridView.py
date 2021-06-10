@@ -44,6 +44,10 @@ class GridView(QMainWindow):
                     carre.setStyleSheet("background-image: url(block/lime_wool.png)")
                 if grid[i][j]==3:
                     carre.setStyleSheet("background-image: url(block/cobblestone.png) ")
+                if grid[i][j]==4:
+                    carre.setStyleSheet("background-image: url(block/black_stained_glass.png) ")
+                if grid[i][j]==5:
+                    carre.setStyleSheet("background-image: url(block/item_frame.png) ")
                 self.__GridLayout.addWidget(carre,i,j)
 
 
