@@ -122,8 +122,8 @@ class Grid():
                         print("bloqué 1.4")
                         self.positionJ[1]=self.__NbColone-2
                         return
+                    #test si il y a une caisse puis un mur ou un trourempli  la ou le joueur se deplace
                     elif (((i==self.positionJ[0]+x)and(j==self.positionJ[1]+y)) and (self.__grid[self.positionJ[0]+2*x][self.positionJ[1]+2*y]==3 or self.__grid[self.positionJ[0]+2*x][self.positionJ[1]+2*y]==5)):
-                        print(self.positionJ[0]+2*x,self.positionJ[1]+2*y)
                         return
 
         if not (0<=self.positionJ[0]+x<self.__NbLigne):
