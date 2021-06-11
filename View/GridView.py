@@ -17,6 +17,13 @@ class GridView(QMainWindow):
         self.setFixedSize(640,640)
         self.UpdateView()
         self.__Controller.setFocus()
+        menu=self.menuBar()
+        menuJeu=menu.addAction("restart")
+        menuJeu.triggered.connect(self.restartView)
+    
+    def restartView(self):
+        self.__Grid.chargeLevel()
+        self.UpdateView()
 
     def setGrid(self,Grid):
         self.__Grid=Grid

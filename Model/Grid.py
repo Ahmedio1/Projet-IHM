@@ -13,13 +13,12 @@ class Grid():
         self.__NbLigne=10
         self.__NbColone=10
         self.__grid=[]
-        self.generateGrid()
         self.__view=None
         self.__controle=None
         #du joueur
-        self.__xJ=3
-        self.__yJ=6
-        self.positionJ=[self.__xJ,self.__yJ]
+        self.__xJ=None
+        self.__yJ=None
+        self.positionJ=None
 
         self.__win=False
 
@@ -28,6 +27,9 @@ class Grid():
         self.__level1=True
         self.__level2=False
         self.choixLevel()
+        self.chargeLevel()
+
+    def chargeLevel(self):
         if self.__level2:
             self.generateMap2()
         elif self.__level1:
@@ -47,6 +49,7 @@ class Grid():
         return self.__grid
 
     def generateGrid(self):
+        self.__grid=[]
         for i in range (self.__NbLigne):
             self.__grid.append([])
             for j in range (self.__NbColone):
@@ -60,6 +63,7 @@ class Grid():
         self.__controle=controle
 
     def generateMap1(self):
+        self.generateGrid()
         for i in range (len(self.__grid)): #entourage de la map avec des murs
             self.__grid[i][0]=3
             self.__grid[0][i]=3
@@ -70,8 +74,13 @@ class Grid():
         self.__grid[5][4]=3
         self.__grid[6][2]=2 #placement d'une caisse
         self.__grid[7][4]=2
+        #joueur
+        self.__xJ=3
+        self.__yJ=6
+        self.positionJ=[self.__xJ,self.__yJ]
 
     def generateMap2(self):
+        self.generateGrid()
         for i in range (len(self.__grid)): #entourage de la map avec des murs
             self.__grid[i][0]=3
             self.__grid[0][i]=3
@@ -80,6 +89,10 @@ class Grid():
         self.__grid[7][7]=4 #placement d'un trou
         self.__grid[5][4]=3
         self.__grid[2][2]=2
+        #joueur
+        self.__xJ=3
+        self.__yJ=6
+        self.positionJ=[self.__xJ,self.__yJ]
     
     def choixLevel(self):
         fileLevel=next(walk("Level")) #parcours les fichiers d'un repertoire
