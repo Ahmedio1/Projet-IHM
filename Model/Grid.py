@@ -15,11 +15,12 @@ class Grid():
         self.__grid=[]
         self.__view=None
         self.__controle=None
-        #du joueur
+        #joueur
         self.__xJ=None
         self.__yJ=None
         self.positionJ=None
 
+        #victoire
         self.__win=False
 
         #level
@@ -30,13 +31,8 @@ class Grid():
         self.choixLevel()
         self.chargeLevel()
 
-    def chargeLevel(self):
-        if self.__level3:
-            self.generateMap3()
-        elif self.__level2:
-            self.generateMap2()
-        elif self.__level1:
-            self.generateMap1()
+        #nombre de pas
+        self.__nbPas=0
 
 
     def getNbLigne(self):
@@ -50,6 +46,9 @@ class Grid():
 
     def getGrid(self):
         return self.__grid
+    
+    def getNbPas(self):
+        return self.__nbPas
 
     def generateGrid(self):
         self.__grid=[]
@@ -64,6 +63,14 @@ class Grid():
 
     def setControle(self,controle):
         self.__controle=controle
+    
+    def chargeLevel(self):
+        if self.__level3:
+            self.generateMap3()
+        elif self.__level2:
+            self.generateMap2()
+        elif self.__level1:
+            self.generateMap1()
 
     def generateMap1(self):
         self.generateGrid()

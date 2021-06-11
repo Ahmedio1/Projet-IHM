@@ -17,9 +17,15 @@ class GridView(QMainWindow):
         self.setFixedSize(768,768)
         self.UpdateView()
         self.__Controller.setFocus()
+
+        #menuBar
         menu=self.menuBar()
         menuJeu=menu.addAction("restart")
         menuJeu.triggered.connect(self.restartView)
+
+        #statuBar
+        statusBar=QStatusBar()
+        
     
     def restartView(self):
         self.__Grid.chargeLevel()
