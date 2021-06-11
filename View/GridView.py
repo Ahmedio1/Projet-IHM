@@ -39,6 +39,10 @@ class GridView(QMainWindow):
                 if grid[i][j]==0:
                     carre.setStyleSheet("background-image: url(block/dirt.png)")#mettre le sol derrière!
                 if grid[i][j]==1:
+                    carre.setStyleSheet("background-image: url(block/dirt.png)")
+                    self.__GridLayout.addWidget(carre,i,j)
+                    carre=QWidget()
+                    carre.setFixedSize(self.__Grid.getTaille(),self.__Grid.getTaille())
                     carre.setStyleSheet("background-image: url(block/oxeye_daisy.png)")#joueur
                 if grid[i][j]==2:
                     carre.setStyleSheet("background-image: url(block/lime_wool.png)")#caisse

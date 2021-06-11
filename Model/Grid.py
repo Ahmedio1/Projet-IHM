@@ -3,10 +3,12 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
 import sys
 from View.GridView import GridView
+from os import walk
 
 class Grid():
 
     def __init__(self):
+        self.__fichier=None
         self.__Taille=64
         self.__NbLigne=10
         self.__NbColone=10
@@ -18,7 +20,18 @@ class Grid():
         self.__xJ=3
         self.__yJ=6
         self.positionJ=[self.__xJ,self.__yJ]
-        self.generateMap1()
+
+        self.__win=False
+
+        #level
+        self.__levelActu=None
+        self.__level1=True
+        self.__level2=False
+        self.choixLevel()
+        if self.__level2:
+            self.generateMap2()
+        elif self.__level1:
+            self.generateMap1()
 
 
     def getNbLigne(self):
@@ -38,6 +51,7 @@ class Grid():
             self.__grid.append([])
             for j in range (self.__NbColone):
                 self.__grid[i].append(0)
+    
 
     def getTaille(self):
         return self.__Taille
@@ -52,9 +66,63 @@ class Grid():
             self.__grid[i][9]=3
             self.__grid[9][i]=3
         self.__grid[7][7]=4 #placement d'un trou
+        self.__grid[6][7]=4
         self.__grid[5][4]=3
-        self.__grid[2][2]=2 #placement d'une caisse
-        self.__grid[7][2]=2
+        self.__grid[6][2]=2 #placement d'une caisse
+        self.__grid[7][4]=2
+
+    def generateMap2(self):
+        for i in range (len(self.__grid)): #entourage de la map avec des murs
+            self.__grid[i][0]=3
+            self.__grid[0][i]=3
+            self.__grid[i][9]=3
+            self.__grid[9][i]=3
+        self.__grid[7][7]=4 #placement d'un trou
+        self.__grid[5][4]=3
+        self.__grid[2][2]=2
+    
+    def choixLevel(self):
+        fileLevel=next(walk("Level")) #parcours les fichiers d'un repertoire
+        with open("Level/"+fileLevel[2][2]) as file: #ouvre le ficher et le ferme a la sortie
+            line=file.readline() #lie une ligne
+            ligne=0
+            while line!="": #tant qu'il ya a des lignes
+                if line=='True\n':
+                    if ligne==0:
+                        self.__level1=True
+                        self.__levelActu=1
+                    elif ligne==1:
+                        self.__level2=True
+                        self.__levelActu=2
+                line=file.readline()
+                ligne+=1
+            print(self.__level1, self.__level2)
+
+    
+
+    def verifWin(self):
+        for i in range (len(self.__grid)):
+            for j in range (len(self.__grid[i])): #parcours chaque case
+                if (self.__grid[i][j]==4):
+                    return
+        self.__win=True
+        self.prochainLevel()
+
+    def prochainLevel(self):
+        self.__levelActu+=1
+        if self.__levelActu==2:
+            self.__level2=True
+        fileLevel=next(walk("Level")) #parcours les fichiers d'un repertoire
+        file=open("Level/"+fileLevel[2][2],"w") #ouvre le ficher
+        if self.__level1:
+            file.write("True\n") #rentre true pour le level1 (celui ci doit tjr etre a True)
+        file.close()
+        fileLevel=next(walk("Level")) #parcours les fichiers d'un repertoire
+        file=open("Level/"+fileLevel[2][2], "a") #ouvre le ficher
+        if  self.__level2:
+            print("a")
+            file.write("True\n")
+        self.__levelActu+=1
 
 
 
@@ -80,6 +148,8 @@ class Grid():
                     elif (self.positionJ[0]==i and self.positionJ[1]==j): #test que la caisse a le droit de se déplacer
                         if (self.__grid[i+x][j+y]==4): #test de deplacement dans le trou
                             self.__grid[i+x][j+y]=5  #la case prend l'etat 5 correspondant a une caisse dans un trou
+                            self.verifWin()
+                            print(self.__win)
                         else:
                             self.__grid[i+x][j+y]=2 #la nouvelle case devient une caisse
 
@@ -123,7 +193,7 @@ class Grid():
                         self.positionJ[1]=self.__NbColone-2
                         return
                     #test si il y a une caisse puis un mur ou un trourempli  la ou le joueur se deplace
-                    elif (((i==self.positionJ[0]+x)and(j==self.positionJ[1]+y)) and (self.__grid[self.positionJ[0]+2*x][self.positionJ[1]+2*y]==3 or self.__grid[self.positionJ[0]+2*x][self.positionJ[1]+2*y]==5)):
+                    elif (((i==self.positionJ[0]+x)and(j==self.positionJ[1]+y)) and (self.__grid[self.positionJ[0]+2*x][self.positionJ[1]+2*y]==3 or self.__grid[self.positionJ[0]+2*x][self.positionJ[1]+2*y]==5 or self.__grid[self.positionJ[0]+2*x][self.positionJ[1]+2*y]==2)):
                         return
 
         if not (0<=self.positionJ[0]+x<self.__NbLigne):
