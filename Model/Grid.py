@@ -173,9 +173,7 @@ class Grid():
             file.write("True\n") #le level 2 est accessible
         if  self.__level3: #si on peut passer au level 3
             file.write("True\n") #le level 3 est accessible
-        file.close()
-        if self.__levelActu>=4:
-            self.reset()
+        file.close() #ferme le fichier (economie)
         
 
     def reset(self):
