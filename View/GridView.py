@@ -24,7 +24,7 @@ class GridView(QMainWindow):
         menuJeu.triggered.connect(self.restartView)
 
         #statuBar
-        statusBar=QStatusBar()
+        self.statusBar().showMessage("coups: "+str(self.__Grid.getNbPas()))
         
     
     def restartView(self):

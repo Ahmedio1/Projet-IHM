@@ -3,6 +3,7 @@ from PyQt5.QtWidgets import QApplication
 from Model.Grid import Grid
 from View.GridView import GridView
 from Controller.Controle import Controle
+from View.LevelMenuView import LevelMenuView
 
 
 class App(QApplication):
@@ -11,10 +12,11 @@ class App(QApplication):
         self.__model = Grid()
         self.__controller = Controle(self.__model)
         self.__view = GridView(self.__model, self.__controller)
+        self.__levelView=LevelMenuView(self.__model, self.__view)
         self.__controller.setView(self.__view)
         self.__model.setView(self.__view)
         self.__view.setWindowTitle("Sokoban")
-        self.__view.show()
+        self.__levelView.show()
     
 
 

@@ -34,6 +34,9 @@ class Grid():
         #nombre de pas
         self.__nbPas=0
 
+    def getLevel(self):
+        return [self.__level1, self.__level2, self.__level3]
+
 
     def getNbLigne(self):
         return self.__NbLigne
@@ -169,7 +172,7 @@ class Grid():
         if  self.__level2: #si on peut passer au level 2
             file.write("True\n") #le level 2 est accessible
         if  self.__level3: #si on peut passer au level 3
-            file.write("True\n"+"True\n") #le level 3 est accessible
+            file.write("True\n") #le level 3 est accessible
         file.close()
         if self.__levelActu>=4:
             self.reset()
@@ -265,6 +268,7 @@ class Grid():
             colavt = self.positionJ[1]
             self.positionJ[0] = self.positionJ[0] + x
             self.positionJ[1] = self.positionJ[1] + y
+            self.__nbPas+=1
 
         self.deplacerCai(x,y)
         lgnJ = self.positionJ[0] # ligne joueur
