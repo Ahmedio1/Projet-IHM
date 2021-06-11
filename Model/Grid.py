@@ -120,9 +120,16 @@ class Grid():
         fileLevel=next(walk("Level")) #parcours les fichiers d'un repertoire
         file=open("Level/"+fileLevel[2][2], "a") #ouvre le ficher
         if  self.__level2:
-            print("a")
             file.write("True\n")
-        self.__levelActu+=1
+        if self.__levelActu>=3:
+            self.reset()
+        
+
+    def reset(self):
+        self.__level2=False
+        fileLevel=next(walk("Level")) #parcours les fichiers d'un repertoire
+        file=open("Level/"+fileLevel[2][2],"w") #ouvre le ficher
+        file.write("True\n"+"False\n") #reset le fichier mets tous les niveaux a false sauf le 1
 
 
 
@@ -149,7 +156,6 @@ class Grid():
                         if (self.__grid[i+x][j+y]==4): #test de deplacement dans le trou
                             self.__grid[i+x][j+y]=5  #la case prend l'etat 5 correspondant a une caisse dans un trou
                             self.verifWin()
-                            print(self.__win)
                         else:
                             self.__grid[i+x][j+y]=2 #la nouvelle case devient une caisse
 
