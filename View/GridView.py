@@ -14,7 +14,7 @@ class GridView(QMainWindow):
         self.__GridLayout.setContentsMargins(0,0,7,9)
         self.__Controller.setLayout(self.__GridLayout)
         self.setCentralWidget(self.__Controller)
-        self.setFixedSize(640,640)
+        self.setFixedSize(768,768)
         self.UpdateView()
         self.__Controller.setFocus()
         menu=self.menuBar()

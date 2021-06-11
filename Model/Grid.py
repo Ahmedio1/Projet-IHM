@@ -10,8 +10,8 @@ class Grid():
     def __init__(self):
         self.__fichier=None
         self.__Taille=64
-        self.__NbLigne=10
-        self.__NbColone=10
+        self.__NbLigne=12
+        self.__NbColone=12
         self.__grid=[]
         self.__view=None
         self.__controle=None
@@ -26,11 +26,14 @@ class Grid():
         self.__levelActu=None
         self.__level1=True
         self.__level2=False
+        self.__level3=False
         self.choixLevel()
         self.chargeLevel()
 
     def chargeLevel(self):
-        if self.__level2:
+        if self.__level3:
+            self.generateMap3()
+        elif self.__level2:
             self.generateMap2()
         elif self.__level1:
             self.generateMap1()
@@ -64,39 +67,59 @@ class Grid():
 
     def generateMap1(self):
         self.generateGrid()
-        for i in range (len(self.__grid)): #entourage de la map avec des murs
-            self.__grid[i][0]=3
-            self.__grid[0][i]=3
-            self.__grid[i][9]=3
-            self.__grid[9][i]=3
-        self.__grid[7][7]=4 #placement d'un trou
-        self.__grid[6][7]=4
-        self.__grid[5][4]=3
-        self.__grid[6][2]=2 #placement d'une caisse
-        self.__grid[7][4]=2
-        #joueur
-        self.__xJ=3
-        self.__yJ=6
-        self.positionJ=[self.__xJ,self.__yJ]
+        fileLevel=next(walk("Level")) #parcours les fichiers d'un repertoire
+        with open("Level/"+fileLevel[2][0], "r") as file: #ouvre le ficher et le ferme a la sortie
+            for i in range (self.__NbLigne):
+                line=file.readline()
+                line=line.split("\n") #retire le \n
+                line=line[0].split(",") #transform la chaine en tableau de charatere
+                self.__grid[i]=line
+        for i in range(len(self.__grid)):
+            for j in range(len(self.__grid[i])):
+                self.__grid[i][j]=int(self.__grid[i][j]) #transformation des string en int
+                if self.__grid[i][j]==1: #si il s'agit d'un joueur
+                    self.__xJ=i #initialise les coo du joueurs
+                    self.__yJ=j
+                    self.positionJ=[self.__xJ,self.__yJ]
 
+        
     def generateMap2(self):
         self.generateGrid()
-        for i in range (len(self.__grid)): #entourage de la map avec des murs
-            self.__grid[i][0]=3
-            self.__grid[0][i]=3
-            self.__grid[i][9]=3
-            self.__grid[9][i]=3
-        self.__grid[7][7]=4 #placement d'un trou
-        self.__grid[5][4]=3
-        self.__grid[2][2]=2
-        #joueur
-        self.__xJ=3
-        self.__yJ=6
-        self.positionJ=[self.__xJ,self.__yJ]
+        fileLevel=next(walk("Level")) #parcours les fichiers d'un repertoire
+        with open("Level/"+fileLevel[2][1], "r") as file: #ouvre le ficher et le ferme a la sortie
+            for i in range (self.__NbLigne):
+                line=file.readline()
+                line=line.split("\n")
+                line=line[0].split(",")
+                self.__grid[i]=line
+        for i in range(len(self.__grid)):
+            for j in range(len(self.__grid[i])):
+                self.__grid[i][j]=int(self.__grid[i][j]) #transformation des string en int
+                if self.__grid[i][j]==1:
+                    self.__xJ=i
+                    self.__yJ=j
+                    self.positionJ=[self.__xJ,self.__yJ]
+    
+    def generateMap3(self):
+        self.generateGrid()
+        fileLevel=next(walk("Level")) #parcours les fichiers d'un repertoire
+        with open("Level/"+fileLevel[2][2], "r") as file: #ouvre le ficher et le ferme a la sortie
+            for i in range (self.__NbLigne):
+                line=file.readline()
+                line=line.split("\n")
+                line=line[0].split(",")
+                self.__grid[i]=line
+        for i in range(len(self.__grid)):
+            for j in range(len(self.__grid[i])):
+                self.__grid[i][j]=int(self.__grid[i][j]) #transformation des string en int
+                if self.__grid[i][j]==1:
+                    self.__xJ=i
+                    self.__yJ=j
+                    self.positionJ=[self.__xJ,self.__yJ]
     
     def choixLevel(self):
         fileLevel=next(walk("Level")) #parcours les fichiers d'un repertoire
-        with open("Level/"+fileLevel[2][2]) as file: #ouvre le ficher et le ferme a la sortie
+        with open("Level/"+fileLevel[2][3], "r") as file: #ouvre le ficher et le ferme a la sortie
             line=file.readline() #lie une ligne
             ligne=0
             while line!="": #tant qu'il ya a des lignes
@@ -107,9 +130,11 @@ class Grid():
                     elif ligne==1:
                         self.__level2=True
                         self.__levelActu=2
+                    elif ligne==2:
+                        self.__level3=True
+                        self.__levelActu=3
                 line=file.readline()
                 ligne+=1
-            print(self.__level1, self.__level2)
 
     
 
@@ -125,24 +150,30 @@ class Grid():
         self.__levelActu+=1
         if self.__levelActu==2:
             self.__level2=True
+        elif self.__levelActu==3:
+            self.__level3=True
         fileLevel=next(walk("Level")) #parcours les fichiers d'un repertoire
-        file=open("Level/"+fileLevel[2][2],"w") #ouvre le ficher
+        file=open("Level/"+fileLevel[2][3],"w") #ouvre le ficher
         if self.__level1:
             file.write("True\n") #rentre true pour le level1 (celui ci doit tjr etre a True)
         file.close()
         fileLevel=next(walk("Level")) #parcours les fichiers d'un repertoire
-        file=open("Level/"+fileLevel[2][2], "a") #ouvre le ficher
-        if  self.__level2:
-            file.write("True\n")
-        if self.__levelActu>=3:
+        file=open("Level/"+fileLevel[2][3], "a") #ouvre le ficher
+        if  self.__level2: #si on peut passer au level 2
+            file.write("True\n") #le level 2 est accessible
+        if  self.__level3: #si on peut passer au level 3
+            file.write("True\n"+"True\n") #le level 3 est accessible
+        file.close()
+        if self.__levelActu>=4:
             self.reset()
         
 
     def reset(self):
         self.__level2=False
+        self.__level3=False
         fileLevel=next(walk("Level")) #parcours les fichiers d'un repertoire
-        file=open("Level/"+fileLevel[2][2],"w") #ouvre le ficher
-        file.write("True\n"+"False\n") #reset le fichier mets tous les niveaux a false sauf le 1
+        file=open("Level/"+fileLevel[2][3],"w") #ouvre le ficher
+        file.write("True\n"+"False\n"+"False\n") #reset le fichier mets tous les niveaux a false sauf le 1
 
 
 

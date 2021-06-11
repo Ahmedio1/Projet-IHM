@@ -15,6 +15,7 @@ class App(QApplication):
         self.__model.setView(self.__view)
         self.__view.setWindowTitle("Sokoban")
         self.__view.show()
+    
 
 
 # Main
