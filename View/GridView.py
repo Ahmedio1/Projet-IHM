@@ -14,9 +14,22 @@ class GridView(QMainWindow):
         self.__GridLayout.setContentsMargins(0,0,7,9)
         self.__Controller.setLayout(self.__GridLayout)
         self.setCentralWidget(self.__Controller)
-        self.setFixedSize(640,640)
+        self.setFixedSize(768,768)
         self.UpdateView()
         self.__Controller.setFocus()
+
+        #menuBar
+        menu=self.menuBar()
+        menuJeu=menu.addAction("restart")
+        menuJeu.triggered.connect(self.restartView)
+
+        #statuBar
+        statusBar=QStatusBar()
+        
+    
+    def restartView(self):
+        self.__Grid.chargeLevel()
+        self.UpdateView()
 
     def setGrid(self,Grid):
         self.__Grid=Grid
@@ -39,6 +52,10 @@ class GridView(QMainWindow):
                 if grid[i][j]==0:
                     carre.setStyleSheet("background-image: url(block/dirt.png)")#mettre le sol derrière!
                 if grid[i][j]==1:
+                    carre.setStyleSheet("background-image: url(block/dirt.png)")
+                    self.__GridLayout.addWidget(carre,i,j)
+                    carre=QWidget()
+                    carre.setFixedSize(self.__Grid.getTaille(),self.__Grid.getTaille())
                     carre.setStyleSheet("background-image: url(block/oxeye_daisy.png)")#joueur
                 if grid[i][j]==2:
                     carre.setStyleSheet("background-image: url(block/lime_wool.png)")#caisse
