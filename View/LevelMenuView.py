@@ -1,8 +1,8 @@
+from View.ResetMessage import ResetMessage
 from PyQt5.QtCore import *
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
 import sys
-from Model import *
 from Model.Grid import Grid
 
 class LevelMenuView(QMainWindow):
@@ -33,27 +33,11 @@ class LevelMenuView(QMainWindow):
         levelWidget.layout().addWidget(self.__button3)
 
         #button reset
-        """
         self.__buttonReset=QPushButton("Reset")
         self.__buttonReset.setStyleSheet("background-image: url(block/mycelium_top.png)")
-        self.__buttonReset.clicked.connect(self.resetMessage)
+        self.__buttonReset.clicked.connect(ResetMessage)
         levelWidget.layout().addWidget(self.__buttonReset)
 
-    def resetMessage(self):
-        window=QMainWindow()
-        messageLayout=QWidget()
-        window.setCentralWidget(messageLayout)
-        messageLayout.setFixedSize(300,300)
-        messageLabel=QLabel("oscour")
-        messageLayout.setLayout(QHBoxLayout(messageLabel))
-        yes=QPushButton("yes")
-        no=QPushButton("no")
-        messageLayout.layout().addWidget(yes)
-        messageLayout.layout().addWidget(no)
-        window.show()
-        while not yes.clicked:
-            yes.clicked.connect(self.__Grid.reset)
-            no.clicked.connect(window.close)"""
         
     def press(self):
         self.__press=True
