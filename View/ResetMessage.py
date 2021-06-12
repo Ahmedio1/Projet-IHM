@@ -17,6 +17,7 @@ class ResetMessage(QMainWindow):
         yes.clicked.connect(self.yesButton)
         no.clicked.connect(self.noButton)
         self.message.show()
+        #pb la fenetre se femre toute seul
         
     
     def yesButton(self):
