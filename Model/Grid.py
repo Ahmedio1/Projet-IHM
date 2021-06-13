@@ -3,11 +3,18 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
 import sys
 from View.GridView import GridView
+from PyQt5.QtMultimedia import QSound
 from os import walk
 
 class Grid():
 
     def __init__(self):
+        # son
+        self.__BoxFall = QSound(".\Sound\BoxFall.wav")
+        self.__BlockMur = QSound(".\Sound\BlockMur.wav")
+        self.__Win = QSound(".\Sound\Win.wav")
+        self.__BattleTheme = QSound(".\Sound\BattleTheme.wav")
+
         self.__fichier=None
         self.__Taille=64
         self.__NbLigne=12
@@ -33,6 +40,18 @@ class Grid():
 
         #nombre de pas
         self.__nbPas=0
+
+
+
+    # Son
+    def boxFallSound(self):
+        self.__BoxFall.play()
+    def blockMurSound(self):
+        self.__BlockMur.play()
+    def winSound(self):
+        self.__Win.play()
+    def battleThemeSound(self):
+        self.__BattleTheme.play()
 
     def getLevel(self):
         return [self.__level1, self.__level2, self.__level3]
@@ -111,6 +130,7 @@ class Grid():
                     self.positionJ=[self.__xJ,self.__yJ]
     
     def generateMap3(self):
+        self.battleThemeSound()
         self.generateGrid()
         fileLevel=next(walk("Level")) #parcours les fichiers d'un repertoire
         with open("Level/"+fileLevel[2][2], "r") as file: #ouvre le ficher et le ferme a la sortie
@@ -126,6 +146,8 @@ class Grid():
                     self.__xJ=i
                     self.__yJ=j
                     self.positionJ=[self.__xJ,self.__yJ]
+
+
     
     def choixLevel(self):
         fileLevel=next(walk("Level")) #parcours les fichiers d'un repertoire
@@ -152,8 +174,11 @@ class Grid():
         for i in range (len(self.__grid)):
             for j in range (len(self.__grid[i])): #parcours chaque case
                 if (self.__grid[i][j]==4):
+                    self.boxFallSound()
                     return
         self.__win=True
+        self.__BattleTheme.stop()
+        self.winSound()
         self.prochainLevel()
 
     def prochainLevel(self):
@@ -225,8 +250,10 @@ class Grid():
             for j in range (len(self.__grid[i])): 
                 if (self.__grid[i][j]==3 or self.__grid[i][j]==4 or self.__grid[i][j]==5): #pour chaque case check si il s'agit d'un mur ou d'un trou (vide ou pas)
                     if (self.positionJ[0]+x == i) and (self.positionJ[1]==j):
+                        self.blockMurSound()
                         return
                     if (self.positionJ[0] == i) and (self.positionJ[1]+y ==j):
+                        self.blockMurSound()
                         return
         
         #Joueur
@@ -252,6 +279,7 @@ class Grid():
                         return
                     #test si il y a une caisse puis un mur ou un trourempli  la ou le joueur se deplace
                     elif (((i==self.positionJ[0]+x)and(j==self.positionJ[1]+y)) and (self.__grid[self.positionJ[0]+2*x][self.positionJ[1]+2*y]==3 or self.__grid[self.positionJ[0]+2*x][self.positionJ[1]+2*y]==5 or self.__grid[self.positionJ[0]+2*x][self.positionJ[1]+2*y]==2)):
+                        self.blockMurSound()
                         return
 
         if not (0<=self.positionJ[0]+x<self.__NbLigne):
