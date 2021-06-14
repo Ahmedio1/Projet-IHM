@@ -10,10 +10,10 @@ class Grid():
 
     def __init__(self):
         # son
+        self.__BattleTheme = QSound(".\Sound\BattleTheme.wav")
         self.__BoxFall = QSound(".\Sound\BoxFall.wav")
         self.__BlockMur = QSound(".\Sound\BlockMur.wav")
         self.__Win = QSound(".\Sound\Win.wav")
-        self.__BattleTheme = QSound(".\Sound\BattleTheme.wav")
 
         self.__fichier=None
         self.__Taille=64
@@ -43,19 +43,23 @@ class Grid():
 
 
 
+
+
     # Son
+    def battleThemeSound(self):
+        self.__BattleTheme.play()
+    def battleThemeSoundStop(self):
+        self.__BattleTheme.stop()
     def boxFallSound(self):
         self.__BoxFall.play()
     def blockMurSound(self):
         self.__BlockMur.play()
     def winSound(self):
         self.__Win.play()
-    def battleThemeSound(self):
-        self.__BattleTheme.play()
+
 
     def getLevel(self):
         return [self.__level1, self.__level2, self.__level3]
-
 
     def getNbLigne(self):
         return self.__NbLigne
@@ -73,6 +77,7 @@ class Grid():
         return self.__nbPas
 
     def generateGrid(self):
+        self.battleThemeSound()
         self.__grid=[]
         for i in range (self.__NbLigne):
             self.__grid.append([])
@@ -176,12 +181,13 @@ class Grid():
                 if (self.__grid[i][j]==4):
                     self.boxFallSound()
                     return
+        self.battleThemeSoundStop()
         self.__win=True
-        self.__BattleTheme.stop()
         self.winSound()
         self.prochainLevel()
 
     def prochainLevel(self):
+
         self.__levelActu+=1
         if self.__levelActu==2:
             self.__level2=True

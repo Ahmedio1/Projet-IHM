@@ -2,6 +2,7 @@ from View.ResetMessage import ResetMessage
 from PyQt5.QtCore import *
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
+from PyQt5.QtMultimedia import QSound
 import sys
 from Model.Grid import Grid
 
@@ -11,11 +12,12 @@ class LevelMenuView(QMainWindow):
         self.__Grid=Model
         self.__GridView=View
 
+
+
         levelWidget=QWidget()
         self.setCentralWidget(levelWidget)
         levelWidget.setLayout(QVBoxLayout())
         levelWidget.setFixedSize(500,500)
-
         #button1
         self.__button1=QPushButton("level 1")
         self.__button1.setStyleSheet("background-image: url(block/end_stone.png)")
@@ -43,6 +45,7 @@ class LevelMenuView(QMainWindow):
         self.__press=True
 
 
+
     def choixLevel(self,numLevel):
         if numLevel==1:
             if self.__Grid.getLevel()[0]:
@@ -56,6 +59,7 @@ class LevelMenuView(QMainWindow):
             if self.__Grid.getLevel()[2]:
                 self.close()
                 self.__GridView.show()
+
         
     
 
